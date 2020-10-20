@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { SignInandSignUp } from './pages/signinandsignup/SignInandSignUp';
 import { auth, createUserProfileDocument } from './firebase/firebase';
 import { connect } from 'react-redux';
@@ -16,7 +16,6 @@ class AppBase extends React.Component {
 
 	componentDidMount() {
 		const { setCurrentUser } = this.props;
-
 		// returns cleanup/logout function
 		this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
 			if (userAuth) {
@@ -48,12 +47,27 @@ class AppBase extends React.Component {
 				<Switch>
 					<Route exact path='/' component={HomePage} />
 					<Route exact path='/shop' component={ShopPage} />
-					<Route exact path='/signin' component={SignInandSignUp} />
+					<Route
+						exact
+						path='/signin'
+						render={() =>
+							this.props.currentUser ? (
+								<Redirect to='/' />
+							) : (
+								<SignInandSignUp />
+							)}
+					/>
 				</Switch>
 			</div>
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	return {
+		currentUser: state.user.currentUser
+	};
+};
 
 const mapDispatchToProps = dispatch => {
 	return {
@@ -61,4 +75,4 @@ const mapDispatchToProps = dispatch => {
 	};
 };
 
-export const App = connect(null, mapDispatchToProps)(AppBase);
+export const App = connect(mapStateToProps, mapDispatchToProps)(AppBase);

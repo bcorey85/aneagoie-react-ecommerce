@@ -8,7 +8,6 @@ import { auth } from '../../firebase/firebase';
 import './Header.scss';
 
 const HeaderBase = ({ currentUser }) => {
-	console.log(currentUser);
 	return (
 		<div className='header'>
 			<Link to='/'>
