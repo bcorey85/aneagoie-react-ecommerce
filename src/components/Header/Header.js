@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { auth } from '../../firebase/firebase';
 
 import { Link } from 'react-router-dom';
 import { ReactComponent as Logo } from '../../images/crown.svg';
-import { auth } from '../../firebase/firebase';
+import { CartIcon } from '../CartIcon/CartIcon';
+import { CartDropdown } from '../CartDropdown/CartDropdown';
 
 import './Header.scss';
 
-const HeaderBase = ({ currentUser }) => {
+const HeaderBase = ({ currentUser, hidden }) => {
 	return (
 		<div className='header'>
 			<Link to='/'>
@@ -29,13 +31,16 @@ const HeaderBase = ({ currentUser }) => {
 						SIGN IN
 					</Link>
 				)}
+				<CartIcon />
+				{hidden ? null : <CartDropdown />}
 			</div>
 		</div>
 	);
 };
 const mapStateToProps = state => {
 	return {
-		currentUser: state.user.currentUser
+		currentUser: state.user.currentUser,
+		hidden: state.cart.hidden
 	};
 };
 
