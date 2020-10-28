@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { auth, createUserProfileDocument } from './firebase/firebase';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -10,8 +9,10 @@ import { ShopPage } from './pages/shoppage/ShopPage';
 import { SignInandSignUp } from './pages/signinandsignup/SignInandSignUp';
 import { CheckoutPage } from './pages/checkout/CheckoutPage';
 
+import { auth, createUserProfileDocument } from './firebase/firebase';
 import { setCurrentUser } from './redux/user/userActions';
 import { selectCurrentUser } from './redux/user/userSelectors';
+
 import './App.css';
 
 class AppBase extends React.Component {
@@ -32,9 +33,9 @@ class AppBase extends React.Component {
 						...snapShot.data()
 					});
 				});
-			} else {
-				setCurrentUser(null);
 			}
+
+			setCurrentUser(userAuth);
 		});
 	}
 
