@@ -10,28 +10,15 @@ import { SignInandSignUp } from './pages/signinandsignup/SignInandSignUp';
 import { CheckoutPage } from './pages/checkout/CheckoutPage';
 
 import { selectCurrentUser } from './redux/user/userSelectors';
-
+import { checkUserSession } from './redux/user/userActions';
 import './App.css';
 
 class AppBase extends React.Component {
 	unsubscribeFromAuth = null;
 
 	componentDidMount() {
-		// returns cleanup/logout function
-		// this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-		// 	if (userAuth) {
-		// 		// check to see if user is persisted in db, if not save to db
-		// 		const userRef = await createUserProfileDocument(userAuth);
-		// 		// listen to state changes on user data on firebase, returns first initial state
-		// 		userRef.onSnapshot(snapShot => {
-		// 			setCurrentUser({
-		// 				id: snapShot.id,
-		// 				...snapShot.data()
-		// 			});
-		// 		});
-		// 	}
-		// 	setCurrentUser(userAuth);
-		// });
+		const { checkUserSession } = this.props;
+		checkUserSession();
 	}
 
 	componentWillUnmount() {
@@ -67,4 +54,10 @@ const mapStateToProps = createStructuredSelector({
 	currentUser: selectCurrentUser
 });
 
-export const App = connect(mapStateToProps)(AppBase);
+const mapDispatchToProps = dispatch => {
+	return {
+		checkUserSession: () => dispatch(checkUserSession())
+	};
+};
+
+export const App = connect(mapStateToProps, mapDispatchToProps)(AppBase);
